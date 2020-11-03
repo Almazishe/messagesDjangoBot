@@ -60,3 +60,25 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ('username',)
+
+
+
+class TelegramUser(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT
+    )
+
+    chat_id = models.PositiveIntegerField(
+        unique=True,
+    )
+
+    username = models.CharField(
+        max_length = 255,
+        unique=True
+    )
+
+
+    def __str__(self):
+        return f'TUser({self.user.username}, {self.username})'
+    
