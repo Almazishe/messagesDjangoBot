@@ -6,10 +6,7 @@ from .models import TelegramState
 from .bot import TelegramBot
 
 
-
-
-@processor(state_manager, from_states='asked_for token', message_types=message_types.Text)
+@processor(state_manager, from_states=state_types.All)
 def get_token(bot: TelegramBot, update: Update, state: TelegramState):
-    
-    bot.sendMessage(update.get_chat().get_id(), update.get_message().get_text())
-    
+    bot.sendMessage(update.get_chat().get_id(),
+                    update.get_message().get_text())
