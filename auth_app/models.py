@@ -73,12 +73,6 @@ class TelegramUser(models.Model):
         unique=True,
     )
 
-    username = models.CharField(
-        max_length = 255,
-        unique=True
-    )
-
-
     def __str__(self):
-        return f'TUser({self.user.username}, {self.username})'
+        return f'TUser({self.user.username}, {self.chat_id})'
     
