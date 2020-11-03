@@ -9,6 +9,7 @@ from .bot import TelegramBot
 from rest_framework.authtoken.models import Token
 from auth_app.models import TelegramUser
 
+import traceback
 
 @processor(state_manager, from_states=state_types.All)
 def get_token(bot: TelegramBot, update: Update, state: TelegramState):
@@ -26,7 +27,7 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     try:
         bot.sendMessage(chat_id, f'Count {tokens.count()}')
         token = Token.objects.get(
-            key=token_body
+            key=token_body.strip()
         )
         bot.sendMessage(chat_id, f'Username {token.user.usename}')
 
@@ -46,5 +47,6 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
         tg_user.save()
 
         bot.sendMessage(chat_id, 'You authorized successfully.')
-    except Exception:
-        bot.sendMessage(chat_id, 'Error somewhere')
+    except Exception as e:
+
+        bot.sendMessage(chat_id, str(e))
