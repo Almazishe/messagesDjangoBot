@@ -9,6 +9,7 @@ from .bot import TelegramBot
 from rest_framework.authtoken.models import Token
 from auth_app.models import TelegramUser
 
+
 @processor(state_manager, from_states=state_types.All)
 def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     chat_id = update.get_chat().get_id()
@@ -21,14 +22,15 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     if tokens.count() == 0:
         bot.sendMessage(chat_id, 'No user with such token.')
         raise ProcessFailure
+    
     try:
-
         bot.sendMessage(chat_id, f'Count {tokens.count()}')
-        token = tokens.first()
+        token = Token.objects.get(
+            key=token_body
+        )
         bot.sendMessage(chat_id, f'Username {token.user.usename}')
 
         user = token.user
-
 
         tg_user = TelegramUser.objects.get_or_create(
             chat_id=chat_id,
@@ -38,7 +40,8 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
 
         tg_user.user = user
 
-        bot.sendMessage(chat_id, f'Telegram User Username {tg_user.user.username}')
+        bot.sendMessage(
+            chat_id, f'Telegram User Username {tg_user.user.username}')
 
         tg_user.save()
 
