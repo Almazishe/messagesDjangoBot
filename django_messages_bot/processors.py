@@ -21,17 +21,27 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     if tokens.count() == 0:
         bot.sendMessage(chat_id, 'No user with such token.')
         raise ProcessFailure
+    try:
 
-    token = tokens.first()
-    user = token.user
+        bot.sendMessage(chat_id, f'Count {tokens.count()}')
+        token = tokens.first()
+        bot.sendMessage(chat_id, f'Username {token.user.usename}')
+
+        user = token.user
 
 
-    tg_user = TelegramUser.objects.get_or_create(
-        chat_id=chat_id
-    )
+        tg_user = TelegramUser.objects.get_or_create(
+            chat_id=chat_id,
+        )
 
-    tg_user.user = user
+        bot.sendMessage(chat_id, f'Telegram User Chat ID {tg_user.chat_id}')
 
-    tg_user.save()
+        tg_user.user = user
 
-    bot.sendMessage(chat_id, 'You authorized successfully.')
+        bot.sendMessage(chat_id, f'Telegram User Username {tg_user.user.username}')
+
+        tg_user.save()
+
+        bot.sendMessage(chat_id, 'You authorized successfully.')
+    except Exception:
+        bot.sendMessage(chat_id, 'Error somewhere')
