@@ -35,5 +35,3 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     tg_user.save()
 
     bot.sendMessage(chat_id, 'You authorized successfully.')
-    
-    
