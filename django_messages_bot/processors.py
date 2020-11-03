@@ -29,7 +29,7 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
         token = Token.objects.get(
             key=token_body.strip()
         )
-        bot.sendMessage(chat_id, f'Username {token.user.usename}')
+        bot.sendMessage(chat_id, f'Username {token.user.username}')
 
         user = token.user
 
