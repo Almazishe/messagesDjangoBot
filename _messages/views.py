@@ -50,3 +50,12 @@ def send_message(request):
         data=response_data,
         status=status.HTTP_400_BAD_REQUEST
     )
+
+
+
+
+
+
+
+
+

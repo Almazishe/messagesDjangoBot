@@ -23,7 +23,6 @@ INSTALLED_APPS = [
     'django_tgbot',
     'django_messages_bot',
 
-
     'auth_app',
     '_messages',
 
