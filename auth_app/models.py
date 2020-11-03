@@ -66,7 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 class TelegramUser(models.Model):
     user = models.ForeignKey(
         User,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True
     )
 
     chat_id = models.PositiveIntegerField(
