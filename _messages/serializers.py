@@ -1,9 +1,20 @@
 from .models import Message
 from rest_framework import serializers
 
+
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
+from django_messages_bot.bot import bot
+from auth_app.models import TelegramUser
+
+
+def sendMessage(from_user, to_user, text):
+    tg_users = TelegramUser.objects.filter(user__id=to_user.id)
+    if tg_users.count() == 0:
+        return
+    bot.sendMessage(tg_users.first().chat_id, f'{from_user.usename}, я получил от тебя сообщение:\n{text}')
 
 class SendMessageSerializer(serializers.ModelSerializer):
     to_user_id = serializers.IntegerField()
@@ -26,6 +37,9 @@ class SendMessageSerializer(serializers.ModelSerializer):
             text=self.validated_data.get('text')
         )
         message.save()
+
+        sendMessage(request.user, to_user.first(), self.validated_data.get('text'))
+
         return message
 
     class Meta:

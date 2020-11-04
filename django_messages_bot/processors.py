@@ -11,6 +11,7 @@ from auth_app.models import TelegramUser
 
 import traceback
 
+
 @processor(state_manager, from_states=state_types.All)
 def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     chat_id = update.get_chat().get_id()
@@ -23,33 +24,25 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     if tokens.count() == 0:
         bot.sendMessage(chat_id, 'No user with such token.')
         raise ProcessFailure
-    
+
+    token = Token.objects.get(
+        key=token_body.strip()
+    )
+
+    user = token.user
+
     try:
-        bot.sendMessage(chat_id, f'Count {tokens.count()}')
-        token = Token.objects.get(
-            key=token_body.strip()
+        tg_user = TelegramUser.objects.get(
+            chat_id=chat_id,
         )
-        bot.sendMessage(chat_id, f'Username {token.user.username}')
+    except:
+        tg_user = TelegramBot(chat_id=chat_id)
 
-        user = token.user
+    tg_user.user = user
 
-        try:
-            tg_user = TelegramUser.objects.get(
-                chat_id=chat_id,
-            )
-        except:
-            tg_user = TelegramBot(chat_id=chat_id)
+    bot.sendMessage(
+        chat_id, f'Telegram User Username {tg_user.user.username}')
 
-        bot.sendMessage(chat_id, f'Telegram User Chat ID {tg_user.chat_id}')
+    tg_user.save()
 
-        tg_user.user = user
-
-        bot.sendMessage(
-            chat_id, f'Telegram User Username {tg_user.user.username}')
-
-        tg_user.save()
-
-        bot.sendMessage(chat_id, 'You authorized successfully.')
-    except Exception as e:
-
-        bot.sendMessage(chat_id, str(e))
+    bot.sendMessage(chat_id, 'You authorized successfully.')
