@@ -14,7 +14,7 @@ def sendMessage(from_user, to_user, text):
     tg_users = TelegramUser.objects.filter(user__id=to_user.id)
     if tg_users.count() == 0:
         return
-    bot.sendMessage(tg_users.first().chat_id, f'{from_user.usename}, я получил от тебя сообщение:\n{text}')
+    bot.sendMessage(tg_users.first().chat_id, f'{from_user.username}, я получил от тебя сообщение:\n{text}')
 
 class SendMessageSerializer(serializers.ModelSerializer):
     to_user_id = serializers.IntegerField()
