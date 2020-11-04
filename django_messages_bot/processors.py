@@ -33,9 +33,12 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
 
         user = token.user
 
-        tg_user = TelegramUser.objects.get_or_create(
-            chat_id=chat_id,
-        )
+        try:
+            tg_user = TelegramUser.objects.get(
+                chat_id=chat_id,
+            )
+        except:
+            tg_user = TelegramBot(chat_id=chat_id)
 
         bot.sendMessage(chat_id, f'Telegram User Chat ID {tg_user.chat_id}')
 
