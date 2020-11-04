@@ -41,8 +41,8 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
             bot.sendMessage(chat_id, str(e))
 
             tg_user = TelegramBot()
-            tg_user.chat_id=chat_id
-
+            tg_user.chat_id = chat_id
+            bot.sendMessage(chat_id, "Chat " + tg_user.chat_id)
 
         tg_user.user = user
 
