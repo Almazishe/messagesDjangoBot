@@ -32,18 +32,22 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
     user = token.user
 
     try:
-        tg_user = TelegramUser.objects.get(
-            chat_id=chat_id,
-        )
-    except:
-        tg_user = TelegramBot()
-        tg_user.chat_id=chat_id
 
-    tg_user.user = user
+        try:
+            tg_user = TelegramUser.objects.get(
+                chat_id=chat_id,
+            )
+        except:
+            tg_user = TelegramBot()
+            tg_user.chat_id=chat_id
 
-    bot.sendMessage(
-        chat_id, f'Telegram User Username {tg_user.user.username}')
+        tg_user.user = user
 
-    tg_user.save()
+        bot.sendMessage(
+            chat_id, f'Telegram User Username {tg_user.user.username}')
 
-    bot.sendMessage(chat_id, 'You authorized successfully.')
+        tg_user.save()
+
+        bot.sendMessage(chat_id, 'You authorized successfully.')
+    except Exception as e:
+        bot.sendMessage(chat_id, str(e))
