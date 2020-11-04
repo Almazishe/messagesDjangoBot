@@ -36,7 +36,8 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
             chat_id=chat_id,
         )
     except:
-        tg_user = TelegramBot(chat_id=chat_id)
+        tg_user = TelegramBot()
+        tg_user.chat_id=chat_id
 
     tg_user.user = user
 
