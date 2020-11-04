@@ -40,7 +40,7 @@ def get_token(bot: TelegramBot, update: Update, state: TelegramState):
         except Exception as e:
             bot.sendMessage(chat_id, str(e))
 
-            tg_user = TelegramBot()
+            tg_user = TelegramUser()
             tg_user.chat_id = chat_id
             bot.sendMessage(chat_id, "Chat " + tg_user.chat_id)
 
